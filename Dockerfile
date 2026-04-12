@@ -1,17 +1,26 @@
-# Use Node.js 20 LTS as base
-FROM node:20-slim
+# Stage 1: Build the frontend
+FROM node:20-slim AS frontend-build
+WORKDIR /app/frontend
+COPY frontend/package*.json ./
+RUN npm install
+COPY frontend/ ./
+RUN npm run build
 
-# Set working directory
+# Stage 2: Serve Backend and Frontend together
+FROM node:20-slim
 WORKDIR /usr/src/app
 
-# Copy package files
+# Copy backend package files
 COPY package*.json ./
 
-# Install dependencies (only production for smaller image)
+# Install backend dependencies (production only for smaller image)
 RUN npm install --only=production
 
-# Copy app source
+# Copy backend source code
 COPY . .
+
+# Copy built frontend assets from Stage 1
+COPY --from=frontend-build /app/frontend/dist ./frontend/dist
 
 # Expose port (Cloud Run defaults to 8080)
 ENV PORT=8080

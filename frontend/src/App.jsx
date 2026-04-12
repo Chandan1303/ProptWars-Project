@@ -44,6 +44,7 @@ function App() {
   const [activeZones, setActiveZones] = useState([]);
   const [friends, setFriends] = useState([]);
   const [predictiveAlert, setPredictiveAlert] = useState(null);
+  const [searchInput, setSearchInput] = useState('');
 
   // Auto-polling reference to compare state
   const prevCrowdDataRef = useRef({});
@@ -87,6 +88,7 @@ function App() {
     if (selected) {
       setStatusMsg("Analyzing new location...");
       setDecision(null);
+      setSearchInput(selected.name);
 
       const newFormData = {
         ...formData,
@@ -176,6 +178,41 @@ function App() {
     setAutocompleteRef(autocomplete);
   };
 
+  const handleManualSearch = (e) => {
+    if (e) e.preventDefault();
+    if (!searchInput) return;
+    setStatusMsg("Searching location...");
+    const geocoder = new window.google.maps.Geocoder();
+    geocoder.geocode({ address: searchInput }, async (results, status) => {
+      if (status === 'OK' && results[0]) {
+        const place = results[0];
+        const lat = place.geometry.location.lat();
+        const lng = place.geometry.location.lng();
+
+        setIsEmergencyMode(false);
+        setDecision(null);
+
+        const name = place.formatted_address || searchInput;
+        setSearchInput(name);
+
+        const newFormData = {
+          ...formData,
+          locationName: name,
+          lat,
+          lng
+        };
+        setFormData(newFormData);
+
+        await handleGetRoute(null, false, newFormData);
+        await fetchCrowdData();
+        setStatusMsg("Smart navigation ready");
+      } else {
+        setStatusMsg(`Search Failed: ${status}. API Key issue?`);
+        console.error("Geocoding API blocked:", status);
+      }
+    });
+  };
+
   const onPlaceChanged = async () => {
     if (autocompleteRef !== null) {
       const place = autocompleteRef.getPlace();
@@ -186,9 +223,12 @@ function App() {
         const lat = place.geometry.location.lat();
         const lng = place.geometry.location.lng();
 
+        const name = place.name || place.formatted_address || 'Selected Location';
+        setSearchInput(name);
+
         const newFormData = {
           ...formData,
-          locationName: place.name || 'Selected Location',
+          locationName: name,
           lat,
           lng
         };
@@ -333,25 +373,7 @@ function App() {
           <h1>Smart Stadium AI</h1>
         </div>
 
-        {/* TOP: LOCATION SEARCH */}
-        <div className="top-search" style={{ flex: 1, margin: '0 40px', maxWidth: '400px' }}>
-          <div style={{ marginBottom: '4px', fontSize: '12px', color: 'var(--text-muted)' }}>
-            📍 Active Location: <strong style={{ color: 'var(--primary)' }}>{formData.locationName}</strong>
-          </div>
-          {isLoaded ? (
-            <Autocomplete onLoad={onLoadAutocomplete} onPlaceChanged={onPlaceChanged}>
-              <input
-                type="text"
-                placeholder="Search real-world stadium or city..."
-                className="location-search-input"
-                style={{
-                  width: '100%', padding: '10px', borderRadius: '8px',
-                  border: '1px solid var(--card-border)', backgroundColor: 'var(--bg-color)', color: 'var(--text-main)'
-                }}
-              />
-            </Autocomplete>
-          ) : <div>Loading Google Places...</div>}
-        </div>
+        <div style={{ flex: 1 }}></div>
 
         <div className="status-indicator" style={{ display: 'flex', alignItems: 'center' }}>
           <div style={{ display: 'flex', marginRight: '16px', background: 'var(--card-bg)', border: '1px solid var(--card-border)', borderRadius: '6px', overflow: 'hidden' }}>
@@ -424,22 +446,67 @@ function App() {
             <form onSubmit={handleGetRoute} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
 
               <div className="form-group">
-                <label style={{ color: theme === 'light' ? '#000' : '#fff' }}>Active Context Location</label>
-                <select
-                  className="location-selector"
-                  value={formData.locationName}
-                  onChange={handleQuickSelect}
-                  style={{ padding: '10px', borderRadius: '6px', backgroundColor: 'var(--bg-color)', color: 'var(--text-main)', border: '1px solid var(--card-border)', cursor: 'pointer' }}
-                >
-                  <option value={formData.locationName}>{formData.locationName}</option>
-                  <option disabled>──────────</option>
-                  {POPULAR_STADIUMS.filter(s => s.name !== formData.locationName).map(s => (
-                    <option key={s.name} value={s.name}>{s.name}</option>
+                <label style={{ color: theme === 'light' ? '#000' : '#fff' }}>Search Any Location</label>
+                <div style={{ display: 'flex', gap: '8px' }}>
+                  <div style={{ flex: 1 }}>
+                    {isLoaded ? (
+                      <Autocomplete onLoad={onLoadAutocomplete} onPlaceChanged={onPlaceChanged}>
+                        <input
+                          type="text"
+                          value={searchInput}
+                          onChange={(e) => setSearchInput(e.target.value)}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                              e.preventDefault();
+                              handleManualSearch();
+                            }
+                          }}
+                          placeholder="Type any stadium or city..."
+                          style={{
+                            width: '100%', padding: '10px', borderRadius: '6px',
+                            border: '1px solid var(--card-border)', backgroundColor: 'var(--bg-color)', color: 'var(--text-main)'
+                          }}
+                        />
+                      </Autocomplete>
+                    ) : <div style={{color: 'var(--text-main)'}}>Loading Google Places...</div>}
+                  </div>
+                  <button 
+                    type="button" 
+                    onClick={handleManualSearch}
+                    style={{
+                      padding: '10px 16px',
+                      backgroundColor: 'var(--primary)',
+                      color: 'white',
+                      border: 'none',
+                      borderRadius: '6px',
+                      cursor: 'pointer',
+                      fontWeight: 'bold'
+                    }}
+                  >
+                    Search
+                  </button>
+                </div>
+                
+                <div style={{ marginTop: '8px', fontSize: '11px', color: 'var(--text-muted)' }}>
+                  📍 Current: <strong style={{ color: 'var(--primary)' }}>{formData.locationName}</strong>
+                </div>
+
+                <div style={{ marginTop: '12px', display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                  {POPULAR_STADIUMS.map(s => (
+                    <button
+                      key={s.name}
+                      type="button"
+                      onClick={() => handleQuickSelect({ target: { value: s.name } })}
+                      style={{
+                        padding: '4px 8px', fontSize: '11px', borderRadius: '12px', border: '1px solid var(--card-border)',
+                        backgroundColor: formData.locationName === s.name ? 'var(--primary)' : 'var(--bg-color)',
+                        color: formData.locationName === s.name ? '#fff' : 'var(--text-main)', cursor: 'pointer'
+                      }}
+                    >
+                      {s.name.split(',')[0]}
+                    </button>
                   ))}
-                </select>
-                <small style={{ marginTop: '6px', display: 'block', color: '#64748b', fontSize: '11px' }}>
-                  *You can also search ANY location using the search bar at the top!
-                </small>
+                </div>
               </div>
 
               <div className="form-group">
