@@ -270,7 +270,7 @@ function App() {
 
   const fetchCrowdData = async () => {
     try {
-      const res = await fetch('http://localhost:8080/api/crowd');
+      const res = await fetch('/api/crowd');
       if (res.ok) {
         const newData = await res.json();
         const newLevels = newData.levels;
@@ -306,7 +306,7 @@ function App() {
     }
 
     try {
-      const response = await fetch('http://localhost:8080/get-decision', {
+      const response = await fetch('/get-decision', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
