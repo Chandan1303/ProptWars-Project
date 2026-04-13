@@ -6,3 +6,7 @@ frontend/node_modules/
 /.env
 env.yaml
 *.log
+
+# Force Google Cloud Build to include these keys despite gitignore!
+!.env
+!frontend/.env
