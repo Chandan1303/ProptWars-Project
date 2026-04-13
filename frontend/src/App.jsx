@@ -710,7 +710,7 @@ function App() {
                     <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginTop: '6px' }}>
                       {decision.primary_route.map((node, idx) => (
                         <React.Fragment key={idx}>
-                          <span className="route-tag" style={{ backgroundColor: '#e11d48', padding: '4px 8px', borderRadius: '4px' }}>{node.name || 'Point'}</span>
+                          <span className="route-tag" style={{ backgroundColor: '#e11d48', color: '#ffffff', padding: '4px 8px', borderRadius: '4px' }}>{node.name || 'Point'}</span>
                           {idx < decision.primary_route.length - 1 && <span className="route-arrow">➔</span>}
                         </React.Fragment>
                       ))}
@@ -724,7 +724,7 @@ function App() {
                     <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginTop: '6px' }}>
                       {decision.alternate_route.map((node, idx) => (
                         <React.Fragment key={idx}>
-                          <span className="route-tag" style={{ backgroundColor: '#3f3f46', padding: '4px 8px', borderRadius: '4px' }}>{node.name || 'Point'}</span>
+                          <span className="route-tag" style={{ backgroundColor: '#3f3f46', color: '#ffffff', padding: '4px 8px', borderRadius: '4px' }}>{node.name || 'Point'}</span>
                           {idx < decision.alternate_route.length - 1 && <span className="route-arrow">➔</span>}
                         </React.Fragment>
                       ))}

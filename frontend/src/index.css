@@ -41,6 +41,7 @@ body {
   min-width: 320px;
   min-height: 100vh;
   background: var(--bg-color);
+  color: var(--text-main);
   font-family: 'Outfit', sans-serif;
 }
 
