@@ -57,7 +57,7 @@ function App() {
   }, [score]);
 
   useEffect(() => {
-    document.body.className = theme === 'light' ? 'light-theme' : '';
+    document.body.className = theme === 'dark' ? 'dark-theme' : '';
     localStorage.setItem('stadium-theme', theme);
   }, [theme]);
 
@@ -462,14 +462,14 @@ function App() {
         {/* SIDEBAR: INTENT + TIME SELECTION OR ADMIN VIEW */}
         {viewMode === 'admin' ? (
           <aside className="sidebar admin-sidebar" style={{ width: '400px' }}>
-            <h2 style={{ color: theme === 'light' ? '#000' : '#fff' }}>Global Organizer Dashboard</h2>
+            <h2 style={{ color: 'var(--text-main)' }}>Global Organizer Dashboard</h2>
             <div className="analytics-box" style={{ marginTop: '16px' }}>
-              <h3 style={{ color: theme === 'light' ? '#000' : '#fff' }}>Live Crowd Density</h3>
+              <h3 style={{ color: 'var(--text-main)' }}>Live Crowd Density</h3>
               {Object.entries(crowdData).length === 0 && <p style={{ fontSize: '12px', color: 'var(--text-muted)' }}>Waiting for geospatial telemetry...</p>}
               {Object.entries(crowdData).map(([zoneName, level]) => (
                 <div key={zoneName} style={{ marginBottom: '12px' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', marginBottom: '4px' }}>
-                    <span style={{ color: theme === 'light' ? '#000' : '#fff' }}>{zoneName}</span>
+                    <span style={{ color: 'var(--text-main)' }}>{zoneName}</span>
                     <span style={{ color: getCrowdColor(level), fontWeight: 'bold' }}>{level.toUpperCase()}</span>
                   </div>
                   <div style={{ width: '100%', backgroundColor: 'var(--card-border)', height: '6px', borderRadius: '4px', overflow: 'hidden' }}>
@@ -478,12 +478,12 @@ function App() {
                 </div>
               ))}
 
-              <h3 style={{ marginTop: '32px', color: theme === 'light' ? '#000' : '#fff' }}>Operational Alerts</h3>
-              <div style={{ height: '250px', overflowY: 'auto', border: '1px solid var(--card-border)', padding: '12px', borderRadius: '8px', background: 'rgba(0,0,0,0.05)' }}>
+              <h3 style={{ marginTop: '32px', color: 'var(--text-main)' }}>Operational Alerts</h3>
+              <div style={{ height: '250px', overflowY: 'auto', border: '1px solid var(--card-border)', padding: '12px', borderRadius: '8px', background: 'var(--bg-color)' }}>
                 {Object.entries(crowdData).filter(([n, lvl]) => lvl === 'critical' || lvl === 'high').length === 0 && <p style={{ fontSize: '12px', color: 'var(--text-muted)' }}>No critical alerts in sector.</p>}
                 {Object.entries(crowdData).filter(([n, lvl]) => lvl === 'critical' || lvl === 'high').map(([zone, lvl], i) => (
-                  <div key={i} style={{ padding: '8px', marginBottom: '8px', borderLeft: `3px solid ${lvl === 'critical' ? '#dc2626' : '#f97316'}`, background: 'var(--card-bg)', fontSize: '12px', color: theme === 'light' ? '#000' : '#fff', borderRadius: '4px' }}>
-                    <span style={{ color: lvl === 'critical' ? '#dc2626' : '#f97316', fontWeight: 'bold' }}>🚨 [URGENT]</span> Protocol Alert: {zone} is reporting {lvl} congestion levels. Security dispatched.
+                  <div key={i} style={{ padding: '8px', marginBottom: '8px', borderLeft: `3px solid ${lvl === 'critical' ? 'var(--critical)' : 'var(--danger)'}`, background: 'var(--card-bg)', fontSize: '12px', color: 'var(--text-main)', borderRadius: '4px' }}>
+                    <span style={{ color: lvl === 'critical' ? 'var(--critical)' : 'var(--danger)', fontWeight: 'bold' }}>🚨 [URGENT]</span> Protocol Alert: {zone} is reporting {lvl} congestion levels. Security dispatched.
                   </div>
                 ))}
               </div>
@@ -491,12 +491,12 @@ function App() {
           </aside>
         ) : (
           <aside className="sidebar">
-            <h2 style={{ color: theme === 'light' ? '#000' : '#fff' }}>Navigation Setup</h2>
+            <h2 style={{ color: 'var(--text-main)' }}>Navigation Setup</h2>
 
             <button
               type="button"
               onClick={handleActivateDemo}
-              style={{ backgroundColor: '#22c55e', color: 'white', padding: '12px', borderRadius: '8px', fontWeight: 'bold', border: 'none', cursor: 'pointer', marginBottom: '8px', boxShadow: '0 4px 12px rgba(34, 197, 94, 0.5)' }}
+              style={{ padding: '12px', borderRadius: '12px', fontWeight: '700', border: 'none', cursor: 'pointer', marginBottom: '8px', background: 'linear-gradient(135deg, #10b981, #059669)', color: '#ffffff', boxShadow: '0 4px 15px rgba(16, 185, 129, 0.4)' }}
             >
               🔥 INSTANT DEMO MODE
             </button>
@@ -504,7 +504,7 @@ function App() {
             <button
               type="button"
               onClick={handleEmergencyTrigger}
-              style={{ backgroundColor: '#dc2626', color: 'white', padding: '12px', borderRadius: '8px', fontWeight: 'bold', border: 'none', cursor: 'pointer', marginBottom: '8px', boxShadow: '0 4px 12px rgba(220, 38, 38, 0.5)' }}
+              style={{ padding: '12px', borderRadius: '12px', fontWeight: '700', border: 'none', cursor: 'pointer', marginBottom: '8px', background: 'linear-gradient(135deg, #ef4444, #dc2626)', color: '#ffffff', boxShadow: '0 4px 15px rgba(239, 68, 68, 0.4)' }}
             >
               🚨 1-CLICK EMERGENCY EXIT
             </button>
@@ -512,7 +512,7 @@ function App() {
             <form onSubmit={handleGetRoute} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
 
               <div className="form-group">
-                <label style={{ color: theme === 'light' ? '#000' : '#fff' }}>Search Any Location</label>
+                <label style={{ color: 'var(--text-main)' }}>Search Any Location</label>
                 <div style={{ display: 'flex', gap: '8px' }}>
                   <div style={{ flex: 1 }}>
                     {isLoaded ? (
@@ -576,7 +576,7 @@ function App() {
               </div>
 
               <div className="form-group">
-                <label style={{ color: theme === 'light' ? '#000' : '#fff' }}>What's your intent?</label>
+                <label style={{ color: 'var(--text-main)' }}>What's your intent?</label>
                 <div style={{ display: 'flex', gap: '8px' }}>
                   <select name="intent" value={formData.intent} onChange={handleChange} style={{ flex: 1 }}>
                     <option value="food">Get Food</option>
@@ -632,7 +632,7 @@ function App() {
               </div>
 
               <div className="form-group">
-                <label style={{ color: theme === 'light' ? '#000' : '#fff' }}>AI Routing Preference</label>
+                <label style={{ color: 'var(--text-main)' }}>AI Routing Preference</label>
                 <select name="preference" value={formData.preference} onChange={handleChange}>
                   <option value="balanced">Balanced (Recommended)</option>
                   <option value="least_crowded">Least Crowded (Avoid People)</option>
@@ -641,7 +641,7 @@ function App() {
               </div>
 
               <div className="form-group">
-                <label style={{ color: theme === 'light' ? '#000' : '#fff' }}>Time Phase</label>
+                <label style={{ color: 'var(--text-main)' }}>Time Phase</label>
                 <select name="time" value={formData.time} onChange={handleChange}>
                   <option value="before match">Before Match</option>
                   <option value="live">Live (During Match)</option>
@@ -683,8 +683,8 @@ function App() {
                 <div className="predictive-alert">
                   <div className="predictive-alert-icon">⚠️</div>
                   <div className="predictive-alert-content">
-                    <h4 style={{ color: '#f59e0b' }}>Predictive Alert Triggered</h4>
-                    <p style={{ color: theme === 'light' ? '#000' : '#fff' }}>{predictiveAlert.message} <strong>Auto-rerouting you to a safer path.</strong></p>
+                    <h4 style={{ color: 'var(--warning)' }}>Predictive Alert Triggered</h4>
+                    <p style={{ color: 'var(--text-main)' }}>{predictiveAlert.message} <strong>Auto-rerouting you to a safer path.</strong></p>
                   </div>
                 </div>
               )}
@@ -696,7 +696,7 @@ function App() {
                 </span>
               </div>
               <div className="decision-panel">
-                <div dangerouslySetInnerHTML={{ __html: decision.message }} className="ai-message" style={{ color: theme === 'light' ? '#000' : '#fff' }}></div>
+                <div dangerouslySetInnerHTML={{ __html: decision.message }} className="ai-message" style={{ color: 'var(--text-main)' }}></div>
 
                 {decision.explanation && (
                   <div style={{ marginTop: '16px', padding: '12px', backgroundColor: 'rgba(245, 158, 11, 0.05)', borderLeft: '3px solid var(--primary)', fontStyle: 'italic', color: 'var(--text-muted)' }}>
@@ -732,7 +732,7 @@ function App() {
                   </div>
                 )}
 
-                <div className="ai-reason" style={{ marginTop: '12px', color: theme === 'light' ? '#000' : '#fff' }}>
+                <div className="ai-reason" style={{ marginTop: '12px', color: 'var(--text-main)' }}>
                   <strong>Why?</strong> {decision.reason}
                 </div>
               </div>
