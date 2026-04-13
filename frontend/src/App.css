@@ -32,9 +32,7 @@
 .header-title h1 {
   font-size: 1.75rem;
   font-weight: 800;
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: var(--primary);
   letter-spacing: -0.03em;
 }
 
