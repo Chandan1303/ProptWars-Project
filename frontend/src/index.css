@@ -1,22 +1,22 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
 
 :root {
-  --primary: #1a73e8; /* Google Blue */
-  --primary-glow: rgba(26, 115, 232, 0.3);
-  --secondary: #ea4335; /* Google Red */
-  --bg-color: #ffffff; /* White */
+  --primary: #3b82f6; /* Premium Blue */
+  --primary-glow: rgba(59, 130, 246, 0.4);
+  --secondary: #ec4899; /* Pink accent */
+  --bg-color: #f8fafc; /* Slate 50 */
   --card-bg: #ffffff; /* White */
-  --card-border: #dadce0; /* Google border */
-  --text-main: #202124; /* Google Dark Text */
-  --text-muted: #5f6368; /* Google Gray Text */
+  --card-border: #e2e8f0; /* Slate 200 */
+  --text-main: #0f172a; /* Slate 900 */
+  --text-muted: #64748b; /* Slate 500 */
   
-  --success: #34a853; /* Google Green */
-  --warning: #fbbc04; /* Google Yellow */
-  --danger: #f29900; /* Google Orange */
-  --critical: #ea4335; /* Google Red */
+  --success: #10b981; /* Emerald 500 */
+  --warning: #f59e0b; /* Amber 500 */
+  --danger: #f97316; /* Orange 500 */
+  --critical: #ef4444; /* Red 500 */
   
-  font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
+  font-family: 'Outfit', system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.6;
   font-weight: 400;
 
   color-scheme: light;
@@ -25,11 +25,11 @@
 }
 
 body.dark-theme {
-  --bg-color: #202124; /* Google Dark Background */
-  --card-bg: #292a2d; /* Google Dark Card */
-  --card-border: #3c4043; /* Google Dark Border */
-  --text-main: #e8eaed; /* Google Light Text */
-  --text-muted: #9aa0a6; /* Google Light Muted Text */
+  --bg-color: #0f172a; /* Slate 900 */
+  --card-bg: #1e293b; /* Slate 800 */
+  --card-border: #334155; /* Slate 700 */
+  --text-main: #f8fafc; /* Slate 50 */
+  --text-muted: #94a3b8; /* Slate 400 */
   color-scheme: dark;
 }
 
@@ -41,6 +41,7 @@ body {
   min-width: 320px;
   min-height: 100vh;
   background: var(--bg-color);
+  font-family: 'Outfit', sans-serif;
 }
 
 #root {
@@ -52,55 +53,61 @@ body {
 
 h1, h2, h3 {
   margin: 0;
-  font-weight: 500;
-  letter-spacing: -0.01em;
+  font-weight: 700;
+  letter-spacing: -0.02em;
   color: var(--text-main);
 }
 
 button {
-  background-color: var(--primary);
+  background: linear-gradient(135deg, var(--primary), #2563eb);
   color: white;
   border: none;
-  border-radius: 4px; /* Google uses slighter rounded borders for classic, or 24px for pills. 4px matches standard material */
-  padding: 10px 24px;
-  font-size: 0.9rem;
-  font-weight: 500;
-  letter-spacing: 0.25px;
+  border-radius: 12px;
+  padding: 12px 24px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  font-family: 'Outfit', sans-serif;
+  letter-spacing: 0.02em;
   cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 15px var(--primary-glow), inset 0 1px 1px rgba(255,255,255,0.2);
 }
 
 button:hover {
-  background-color: #174ea6; 
-  box-shadow: 0 1px 3px 0 rgba(60,64,67,0.3), 0 4px 8px 3px rgba(60,64,67,0.15);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px var(--primary-glow), inset 0 1px 1px rgba(255,255,255,0.3);
+}
+
+button:active {
+  transform: translateY(0);
 }
 
 button:disabled {
-  background-color: #f1f3f4;
-  color: #3c4043;
-  opacity: 0.38;
-  cursor: not-allowed;
+  background: var(--card-border);
+  color: var(--text-muted);
   box-shadow: none;
+  cursor: not-allowed;
+  transform: none;
 }
 
 select, input[type="text"] {
   width: 100%;
-  padding: 12px 14px;
-  border-radius: 4px;
-  background-color: transparent;
-  border: 1px solid var(--card-border);
+  padding: 14px 16px;
+  border-radius: 12px;
+  background-color: var(--card-bg);
+  border: 2px solid var(--card-border);
   color: var(--text-main);
-  font-size: 0.95rem;
+  font-size: 1rem;
+  font-family: 'Outfit', sans-serif;
   outline: none;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition: all 0.2s ease;
   box-sizing: border-box;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.02);
 }
 
 select:focus, input[type="text"]:focus {
   border-color: var(--primary);
-  border-width: 2px;
-  padding: 11px 13px; /* Adjust padding to prevent jumping when border becomes 2px */
+  box-shadow: 0 0 0 4px var(--primary-glow);
 }
 
 ::-webkit-scrollbar {
