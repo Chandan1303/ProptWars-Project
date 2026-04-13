@@ -45,6 +45,7 @@ function App() {
   const [friends, setFriends] = useState([]);
   const [predictiveAlert, setPredictiveAlert] = useState(null);
   const [searchInput, setSearchInput] = useState('');
+  const [isDemoActive, setIsDemoActive] = useState(false);
 
   // Auto-polling reference to compare state
   const prevCrowdDataRef = useRef({});
@@ -269,6 +270,7 @@ function App() {
   };
 
   const fetchCrowdData = async () => {
+    if (isDemoActive) return;
     try {
       const res = await fetch('/api/crowd');
       if (res.ok) {
@@ -294,7 +296,63 @@ function App() {
     const interval = setInterval(fetchCrowdData, 10000);
     return () => clearInterval(interval);
     // eslint-disable-next-line
-  }, [decision]);
+  }, [decision, isDemoActive]);
+
+  const handleActivateDemo = () => {
+    setIsDemoActive(true);
+    setStatusMsg("🔥 DEMO MODE ACTIVE");
+    
+    // M Chinnaswamy
+    const demoLat = 12.9788;
+    const demoLng = 77.5996;
+    
+    const mockZones = [
+      { name: "Gate 1 (North)", lat: demoLat + 0.0012, lng: demoLng, level: "critical" },
+      { name: "Gate 2 (South)", lat: demoLat - 0.0012, lng: demoLng, level: "low" },
+      { name: "Food Stall East", lat: demoLat, lng: demoLng + 0.0012, level: "high" },
+      { name: "Restrooms West", lat: demoLat, lng: demoLng - 0.0012, level: "medium" },
+      { name: "VIP Pavilion", lat: demoLat - 0.0006, lng: demoLng + 0.0006, level: "low" },
+      { name: "Merch Stand", lat: demoLat + 0.0006, lng: demoLng - 0.0006, level: "critical" },
+    ];
+    
+    const mockLevels = {
+      "Gate 1 (North)": "critical",
+      "Gate 2 (South)": "low",
+      "Food Stall East": "high",
+      "Restrooms West": "medium",
+      "VIP Pavilion": "low",
+      "Merch Stand": "critical",
+    };
+    
+    setFormData({
+        ...formData,
+        locationName: 'M. Chinnaswamy Stadium, Bengaluru',
+        lat: demoLat,
+        lng: demoLng,
+        intent: 'exit'
+    });
+    
+    setActiveZones(mockZones);
+    setCrowdData(mockLevels);
+    setSearchInput('M. Chinnaswamy Stadium, Bengaluru');
+    
+    setDecision({
+        message: "<strong>[DEMO] Rerouting active.</strong> Bypassing the heavily congested Gate 1 (North) and Merch Stand.",
+        primary_route: [
+          { name: "Your Seat", lat: demoLat, lng: demoLng },
+          { name: "VIP Pavilion", lat: demoLat - 0.0006, lng: demoLng + 0.0006 },
+          { name: "Gate 2 (South)", lat: demoLat - 0.0012, lng: demoLng }
+        ],
+        alternate_route: [
+           { name: "Your Seat", lat: demoLat, lng: demoLng },
+           { name: "Restrooms West", lat: demoLat, lng: demoLng - 0.0012 },
+           { name: "Gate 2 (South)", lat: demoLat - 0.0012, lng: demoLng }
+        ],
+        reason: "Gate 1 is experiencing critical crowd density. VIP Pavilion path is currently safe ('low').",
+        priority: "high"
+    });
+    setScore(prev => prev + 100);
+  };
 
   const handleGetRoute = async (e, isAutoReroute = false, payload = formData) => {
     if (e) e.preventDefault();
@@ -434,6 +492,14 @@ function App() {
         ) : (
           <aside className="sidebar">
             <h2 style={{ color: theme === 'light' ? '#000' : '#fff' }}>Navigation Setup</h2>
+
+            <button
+              type="button"
+              onClick={handleActivateDemo}
+              style={{ backgroundColor: '#22c55e', color: 'white', padding: '12px', borderRadius: '8px', fontWeight: 'bold', border: 'none', cursor: 'pointer', marginBottom: '8px', boxShadow: '0 4px 12px rgba(34, 197, 94, 0.5)' }}
+            >
+              🔥 INSTANT DEMO MODE
+            </button>
 
             <button
               type="button"

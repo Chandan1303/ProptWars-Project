@@ -9,7 +9,7 @@ const mapContainerStyle = {
 
 const getCrowdColor = (level, theme = 'dark') => {
     switch (level) {
-        case 'low': return theme === 'light' ? '#52525b' : '#fafafa'; /* Zinc 600 in Light, White in Dark */
+        case 'low': return '#22c55e'; /* Green 500 */
         case 'medium': return '#facc15'; /* Yellow */
         case 'high': return '#f97316'; /* Orange */
         case 'critical': return '#dc2626'; /* Red */
@@ -133,6 +133,7 @@ const StadiumMap = ({ isLoaded, loadError, center, activeZones, crowdData, route
                         opacity: 0.6,
                         gradient: [
                             'rgba(0, 255, 255, 0)',
+                            'rgba(34, 197, 94, 1)',   // Green
                             'rgba(250, 204, 21, 1)',   // Yellow
                             'rgba(249, 115, 22, 1)',  // Orange
                             'rgba(220, 38, 38, 1)'    // Red
