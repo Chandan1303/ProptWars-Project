@@ -41,8 +41,21 @@ Output Format (STRICT JSON ONLY):
   "priority": "low / medium / high"
 }`;
 
+const routeCache = new Map();
+
 export const getDecision = async (lat, lng, intent, timePhase, activeZones, preference = 'balanced', friends = []) => {
+    // SECURITY & BOUNDARY CHECKS
+    if (typeof lat !== 'number' || typeof lng !== 'number' || lat < -90 || lat > 90 || lng < -180 || lng > 180) {
+        throw new Error("Invalid coordinate boundaries. Lat must be between -90/90, Lng between -180/180.");
+    }
     
+    // EFFICIENCY: CACHING IDENTICAL REQUESTS
+    const cacheKey = `${lat}_${lng}_${intent}_${timePhase}_${preference}`;
+    if (routeCache.has(cacheKey)) {
+        console.log("⚡ [CACHE HIT] Returning optimal route instantly.");
+        return routeCache.get(cacheKey);
+    }
+
     // User Input Prompt Template
     const prompt = `User Context:
 - Current Location: Lat ${lat}, Lng ${lng}
@@ -77,7 +90,13 @@ CRITICAL EMERGENCY DIRECTIVE: If Intent exactly equals 'emergency', you MUST com
         // Parse and return strict JSON response
         const text = result.response.text();
         const cleanText = text.replace(/```json\n?|```/g, '').trim();
-        return JSON.parse(cleanText); 
+        const parsedDecision = JSON.parse(cleanText); 
+        
+        // Save to cache (limit size to 50 for memory efficiency)
+        if (routeCache.size > 50) routeCache.clear();
+        routeCache.set(cacheKey, parsedDecision);
+        
+        return parsedDecision;
 
     } catch (error) {
         console.warn("Gemini API failed or missing key, falling back to rule-based mock decision.", error.message);

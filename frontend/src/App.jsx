@@ -269,6 +269,10 @@ function App() {
     setPredictiveAlert(null);
   };
 
+  /**
+   * Fetches latest dynamically generated crowd metrics.
+   * If a critical congestion overlaps current active AI route, triggers Predictive Alert logic.
+   */
   const fetchCrowdData = async () => {
     if (isDemoActive) return;
     try {
@@ -354,6 +358,15 @@ function App() {
     setScore(prev => prev + 100);
   };
 
+  /**
+   * Main Navigation Action dispatcher
+   * Communicates current context (Location, Intent, Map Data) to backend Gemini engine.
+   * Modifies the UI explicitly if the routing triggers 'High' or 'Critical' zones.
+   *
+   * @param {Event} e - Optional React Form event payload
+   * @param {boolean} isAutoReroute - Determines if action was automatically dispatched via background density poll
+   * @param {Object} payload - Current state of user contexts
+   */
   const handleGetRoute = async (e, isAutoReroute = false, payload = formData) => {
     if (e) e.preventDefault();
     if (!isAutoReroute) {
@@ -440,6 +453,7 @@ function App() {
           </div>
           <button
             onClick={toggleTheme}
+            aria-label="Toggle Dark and Light Theme"
             style={{ marginRight: '16px', background: 'transparent', border: '1px solid var(--card-border)', color: 'var(--text-main)', borderRadius: '6px', padding: '6px 10px', cursor: 'pointer' }}
           >
             {theme === 'dark' ? '☀️ Light' : '🌙 Dark'}
@@ -591,6 +605,9 @@ function App() {
                     type="button"
                     onClick={startVoiceInput}
                     title="Voice Command"
+                    aria-label="Start Voice Command"
+                    role="button"
+                    tabIndex="0"
                     style={{
                       padding: '10px',
                       width: '44px',
@@ -612,6 +629,9 @@ function App() {
                     type="button"
                     onClick={handleFindFriends}
                     title="Find Friends Rendezvous"
+                    aria-label="Find Friends Rendezvous"
+                    role="button"
+                    tabIndex="0"
                     style={{
                       padding: '10px',
                       width: '44px',
