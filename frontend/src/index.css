@@ -1,36 +1,36 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 :root {
-  --primary: #f59e0b; /* Amber */
-  --primary-glow: rgba(245, 158, 11, 0.3);
-  --secondary: #e11d48; /* Crimson */
-  --bg-color: #09090b; /* Pitch Black */
-  --card-bg: #18181b; /* Dark Gray */
-  --card-border: #27272a; /* Lighter Gray border */
-  --text-main: #fafafa;
-  --text-muted: #a1a1aa;
+  --primary: #1a73e8; /* Google Blue */
+  --primary-glow: rgba(26, 115, 232, 0.3);
+  --secondary: #ea4335; /* Google Red */
+  --bg-color: #ffffff; /* White */
+  --card-bg: #ffffff; /* White */
+  --card-border: #dadce0; /* Google border */
+  --text-main: #202124; /* Google Dark Text */
+  --text-muted: #5f6368; /* Google Gray Text */
   
-  --success: #ffffff; /* White instead of Green */
-  --warning: #facc15; /* Yellow */
-  --danger: #f97316; /* Orange */
-  --critical: #dc2626; /* Red */
+  --success: #34a853; /* Google Green */
+  --warning: #fbbc04; /* Google Yellow */
+  --danger: #f29900; /* Google Orange */
+  --critical: #ea4335; /* Google Red */
   
-  font-family: 'Outfit', system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: dark;
+  color-scheme: light;
   color: var(--text-main);
   background-color: var(--bg-color);
 }
 
-body.light-theme {
-  --bg-color: #f4f4f5; /* Zinc 100 */
-  --card-bg: #ffffff; /* White */
-  --card-border: #e4e4e7; /* Zinc 200 */
-  --text-main: #18181b; /* Zinc 900 */
-  --text-muted: #52525b; /* Zinc 600 */
-  color-scheme: light;
+body.dark-theme {
+  --bg-color: #202124; /* Google Dark Background */
+  --card-bg: #292a2d; /* Google Dark Card */
+  --card-border: #3c4043; /* Google Dark Border */
+  --text-main: #e8eaed; /* Google Light Text */
+  --text-muted: #9aa0a6; /* Google Light Muted Text */
+  color-scheme: dark;
 }
 
 body {
@@ -52,50 +52,55 @@ body {
 
 h1, h2, h3 {
   margin: 0;
-  font-weight: 600;
-  letter-spacing: -0.025em;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--text-main);
 }
 
 button {
   background-color: var(--primary);
   color: white;
   border: none;
-  border-radius: 8px;
-  padding: 12px 20px;
-  font-size: 1rem;
-  font-weight: 600;
+  border-radius: 4px; /* Google uses slighter rounded borders for classic, or 24px for pills. 4px matches standard material */
+  padding: 10px 24px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  letter-spacing: 0.25px;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 0 4px 12px var(--primary-glow);
+  box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15);
 }
 
 button:hover {
-  background-color: #d97706; /* Darker amber */
-  transform: translateY(-1px);
+  background-color: #174ea6; 
+  box-shadow: 0 1px 3px 0 rgba(60,64,67,0.3), 0 4px 8px 3px rgba(60,64,67,0.15);
 }
 
 button:disabled {
-  background-color: var(--text-muted);
+  background-color: #f1f3f4;
+  color: #3c4043;
+  opacity: 0.38;
   cursor: not-allowed;
   box-shadow: none;
-  transform: none;
 }
 
-select {
+select, input[type="text"] {
   width: 100%;
-  padding: 10px 14px;
-  border-radius: 8px;
-  background-color: var(--bg-color);
+  padding: 12px 14px;
+  border-radius: 4px;
+  background-color: transparent;
   border: 1px solid var(--card-border);
   color: var(--text-main);
   font-size: 0.95rem;
   outline: none;
-  transition: border-color 0.2s;
-  appearance: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  box-sizing: border-box;
 }
 
-select:focus {
+select:focus, input[type="text"]:focus {
   border-color: var(--primary);
+  border-width: 2px;
+  padding: 11px 13px; /* Adjust padding to prevent jumping when border becomes 2px */
 }
 
 ::-webkit-scrollbar {
@@ -107,10 +112,18 @@ select:focus {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(0, 0, 0, 0.2);
   border-radius: 4px;
 }
 
+.dark-theme ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+}
+
 ::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.dark-theme ::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.3);
 }

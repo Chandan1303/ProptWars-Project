@@ -25,9 +25,8 @@
 
 .header-title h1 {
   font-size: 1.5rem;
-  background: linear-gradient(to right, #f59e0b, #e11d48);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  font-weight: 500;
+  color: var(--text-main);
 }
 
 .status-indicator {

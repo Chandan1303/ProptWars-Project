@@ -34,7 +34,7 @@ function App() {
   const [decision, setDecision] = useState(null);
   const [loading, setLoading] = useState(false);
   const [statusMsg, setStatusMsg] = useState("Ready");
-  const [theme, setTheme] = useState(localStorage.getItem('stadium-theme') || 'dark');
+  const [theme, setTheme] = useState(localStorage.getItem('stadium-theme') || 'light');
   const [viewMode, setViewMode] = useState('user');
   const [isEmergencyMode, setIsEmergencyMode] = useState(false);
   const [isListening, setIsListening] = useState(false);
