@@ -76,7 +76,8 @@ CRITICAL EMERGENCY DIRECTIVE: If Intent exactly equals 'emergency', you MUST com
 
         // Parse and return strict JSON response
         const text = result.response.text();
-        return JSON.parse(text); 
+        const cleanText = text.replace(/```json\n?|```/g, '').trim();
+        return JSON.parse(cleanText); 
 
     } catch (error) {
         console.warn("Gemini API failed or missing key, falling back to rule-based mock decision.", error.message);
