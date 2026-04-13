@@ -24,12 +24,12 @@ const StadiumMap = ({ isLoaded, loadError, center, activeZones, crowdData, route
     // The route is now expected to be an array of standard objects: [{name: "X", lat: 10, lng: 10}, ...]
     const polylinePath = useMemo(() => {
         if (!route || route.length === 0) return [];
-        return route.map(point => ({ lat: point.lat, lng: point.lng })).filter(p => p.lat && p.lng);
+        return route.map(point => ({ lat: Number(point.lat), lng: Number(point.lng) })).filter(p => !isNaN(p.lat) && !isNaN(p.lng));
     }, [route]);
 
     const polylineAlternatePath = useMemo(() => {
         if (!alternateRoute || alternateRoute.length === 0 || isEmergencyMode) return [];
-        return alternateRoute.map(point => ({ lat: point.lat, lng: point.lng })).filter(p => p.lat && p.lng);
+        return alternateRoute.map(point => ({ lat: Number(point.lat), lng: Number(point.lng) })).filter(p => !isNaN(p.lat) && !isNaN(p.lng));
     }, [alternateRoute, isEmergencyMode]);
 
     const heatmapData = useMemo(() => {
@@ -43,7 +43,7 @@ const StadiumMap = ({ isLoaded, loadError, center, activeZones, crowdData, route
         return activeZones.map(zone => {
             const level = crowdData[zone.name] || zone.level || 'low';
             return {
-                location: new window.google.maps.LatLng(zone.lat, zone.lng),
+                location: new window.google.maps.LatLng(Number(zone.lat), Number(zone.lng)),
                 weight: weights[level] || 0
             };
         });
@@ -110,8 +110,8 @@ const StadiumMap = ({ isLoaded, loadError, center, activeZones, crowdData, route
                 return (
                     <Marker
                         key={idx}
-                        position={{ lat: zone.lat, lng: zone.lng }}
-                        onClick={() => setSelectedZone({ name: zone.name, level: level || 'N/A', lat: zone.lat, lng: zone.lng })}
+                        position={{ lat: Number(zone.lat), lng: Number(zone.lng) }}
+                        onClick={() => setSelectedZone({ name: zone.name, level: level || 'N/A', lat: Number(zone.lat), lng: Number(zone.lng) })}
                         icon={{
                             path: window.google.maps.SymbolPath.CIRCLE,
                             fillColor: markerColor,
@@ -146,7 +146,7 @@ const StadiumMap = ({ isLoaded, loadError, center, activeZones, crowdData, route
             {friends && friends.length > 0 && friends.map((friend, idx) => (
                 <Marker 
                     key={`friend-${idx}`}
-                    position={{ lat: friend.lat, lng: friend.lng }} 
+                    position={{ lat: Number(friend.lat), lng: Number(friend.lng) }} 
                     title={friend.id}
                     icon={{
                         path: window.google.maps.SymbolPath.CIRCLE,

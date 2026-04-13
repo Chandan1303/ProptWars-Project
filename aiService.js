@@ -65,7 +65,7 @@ CRITICAL RENDEZVOUS DIRECTIVE: If Intent equals 'friends_rendezvous', you MUST s
 CRITICAL EMERGENCY DIRECTIVE: If Intent exactly equals 'emergency', you MUST completely ignore all crowd levels and preferences. Route the user to the nearest 'Exit' by the absolute fastest line immediately. Set priority to 'critical' and do not provide an alternate route if unnecessary.`;
 
     try {
-        const model = ai.getGenerativeModel({ model: 'gemini-2.5-flash', systemInstruction: SYSTEM_INSTRUCTION });
+        const model = ai.getGenerativeModel({ model: 'gemini-flash-latest', systemInstruction: SYSTEM_INSTRUCTION });
         const result = await model.generateContent({
             contents: [{ role: 'user', parts: [{ text: prompt }] }],
             generationConfig: {
